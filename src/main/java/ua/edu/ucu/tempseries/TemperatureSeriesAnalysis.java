@@ -1,27 +1,27 @@
 package ua.edu.ucu.tempseries;
 
 import java.util.Arrays;
-import java.lang.Math;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
     private double[] tempertureSeries;
     private int seriesLen;
-    private final int minPossibleTemp = -273;
+    private final double minPossibleTemp = -273.0;
 
     public TemperatureSeriesAnalysis() {
         this.tempertureSeries = new double[1];
         this.seriesLen = 0;
     }
 
-    public TemperatureSeriesAnalysis(double[] temperatureSeries) {
-        checkTemps(temperatureSeries);
-        this.tempertureSeries = Arrays.copyOf(temperatureSeries, temperatureSeries.length);
-        this.seriesLen = temperatureSeries.length;
+    public TemperatureSeriesAnalysis(double[] userTemperatureSeries) {
+        checkTemps(userTemperatureSeries, userTemperatureSeries.length);
+        this.tempertureSeries = Arrays.copyOf(userTemperatureSeries,
+                userTemperatureSeries.length);
+        this.seriesLen = userTemperatureSeries.length;
     }
 
     public double average() {
-        if (seriesLen == 0){
+        if (seriesLen == 0) {
             throw new IllegalArgumentException();
         }
         double tempSum = 0;
@@ -32,26 +32,27 @@ public class TemperatureSeriesAnalysis {
     }
 
     public double deviation() {
-        if (seriesLen == 0){
+        if (seriesLen == 0) {
             throw new IllegalArgumentException();
         }
         double tempMean = this.average();
-        double tempVar= 0;
+        double tempVar = 0;
         for (int i = 0; i < seriesLen; i++) {
-            tempVar += Math.pow(tempertureSeries[i] - tempMean, 2) / seriesLen;
+            double curr_res = tempertureSeries[i] - tempMean;
+            tempVar += curr_res * curr_res / seriesLen;
         }
         return Math.pow(tempVar, 0.5);
     }
 
     public double min() {
-        if (seriesLen == 0){
+        if (seriesLen == 0) {
             throw new IllegalArgumentException();
         }
         return this.findTempClosestToValue(minPossibleTemp);
     }
 
     public double max() {
-        if (seriesLen == 0){
+        if (seriesLen == 0) {
             throw new IllegalArgumentException();
         }
         double maxTemp = Double.MIN_VALUE;
@@ -65,7 +66,7 @@ public class TemperatureSeriesAnalysis {
     }
 
     public double findTempClosestToZero() {
-        if (seriesLen == 0){
+        if (seriesLen == 0) {
             throw new IllegalArgumentException();
         }
         return findTempClosestToValue(0);
@@ -135,7 +136,8 @@ public class TemperatureSeriesAnalysis {
         for (int i = 0; i < temps.length; i++) {
             // if array is filled, extend it 2x
             if (seriesLen == tempertureSeries.length) {
-                this.tempertureSeries = Arrays.copyOf(tempertureSeries, tempertureSeries.length * 2);
+                this.tempertureSeries = Arrays.copyOf(tempertureSeries,
+                        tempertureSeries.length * 2);
             }
             tempertureSeries[seriesLen] = temps[i];
             seriesLen++;
@@ -143,15 +145,16 @@ public class TemperatureSeriesAnalysis {
         return seriesLen;
     }
 
-    private void checkTemps(double[] temperatureSeries) {
-        for (int i = 0; i < seriesLen; i++) {
-            if (tempertureSeries[i] < minPossibleTemp) {
+    private void checkTemps(double[] userTemperatureSeries, int userSeriesLen) {
+        for (int i = 0; i < userSeriesLen; i++) {
+            if (userTemperatureSeries[i] < minPossibleTemp) {
                 throw new InputMismatchException();
             }
         }
     }
 
     public String toString() {
-        return "TemperatureSeriesAnalysis" + Arrays.toString(this.tempertureSeries);
+        return "TemperatureSeriesAnalysis"
+                + Arrays.toString(this.tempertureSeries);
     }
 }

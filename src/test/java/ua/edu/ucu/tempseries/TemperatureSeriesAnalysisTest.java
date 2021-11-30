@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysisTest {
 
@@ -38,8 +39,8 @@ public class TemperatureSeriesAnalysisTest {
         double expResult = 1.0;
 
         double actualResult = seriesAnalysis.average();
-        
-        assertEquals(expResult, actualResult, 0.00001);        
+
+        assertEquals(expResult, actualResult, 0.00001);
     }
 
     @Test
@@ -312,6 +313,16 @@ public class TemperatureSeriesAnalysisTest {
         double[] tempSeries = {1, 2, 3};
         TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(tempSeries);
         String expRes = "TemperatureSeriesAnalysis[1.0, 2.0, 3.0]";
+        String actRes = seriesAnalysis.toString();
+        assertEquals(expRes, actRes);
+    }
+
+    @Test(expected = InputMismatchException.class)
+    public void testTemperatureSeriesAnalysisConstructorInvalidTemp() {
+        double[] tempSeries = {0, -273.1, 2};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(tempSeries);
+
+        String expRes = "TemperatureSeriesAnalysis[]";
         String actRes = seriesAnalysis.toString();
         assertEquals(expRes, actRes);
     }
