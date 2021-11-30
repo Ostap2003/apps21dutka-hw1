@@ -38,8 +38,8 @@ public class TemperatureSeriesAnalysis {
         double tempMean = this.average();
         double tempVar = 0;
         for (int i = 0; i < seriesLen; i++) {
-            double curr_res = tempertureSeries[i] - tempMean;
-            tempVar += curr_res * curr_res / seriesLen;
+            double currRes = tempertureSeries[i] - tempMean;
+            tempVar += currRes * currRes / seriesLen;
         }
         return Math.pow(tempVar, 0.5);
     }
